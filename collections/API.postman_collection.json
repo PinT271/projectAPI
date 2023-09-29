@@ -1,0 +1,2728 @@
+{
+	"info": {
+		"_postman_id": "4462742e-8e10-493a-9f69-4f008a00ce29",
+		"name": "API",
+		"description": "Данное API было разработано на фреймворке Django REST Framework в учебных целях, и представляет собой лишь базовый функционал сервиса заказа товаров со склада.\n\n#### API состоит из частей:\n\n1. Authentication\n2. Products\n3. Carts\n4. Cartitems\n5. Orders\n6. Registration\n7. Logout\n    \n\n#### **С каждой из частей API могут взаимодействовать:**\n\n- Гость\n- Пользователь\n- Администратор\n    \n\n**Гостю** доступна возможность _регистрироваться_, _аутентифицироваться_, _просматривать список товаров_.\n\n**Пользователь** может _просматривать список товаров, создавать свою корзину,_ _добавлять товар в корзину_, _просматривать свою корзину_, _удалять товар из своей корзины_, _оформление заказа_(его создание), _просмотр своих заказов_(а также изменение статуса заказа).\n\n**Администратор** может _просматривать список товаров_(добавлять, изменять и удалять соответсвенно).\n\n#### **Начало работы API:**\n\nПосле вступительных слов начинаются основные части разработанного API, работу которых вы можете посмотреть на основе программы POSTMAN.\n\nОсновные части API расположены в желательной последовательности, которой надо придерживаться чтобы не возникало дальнейших трудностей и ошибок с их работой. Также в описании частей API тоже присутствует своя последовательность, которой естественно надо придерживаться.\n\nP.S. Если в описании папки не указана последовательность выполнения запросов(списками в виде точек или цифр), то порядок не имеет значения.\n\nP.S.S. Осторожнее с запросами на удаление конкретных записей, если какая-то запись будет удалена, придётся создавать новую запись и редактировать другие запросы, чтобы всё корректно отображалось(создание заказа на основе корзины тоже сюда относится)!",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29775074"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "User authentication",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "user@shop.ru",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/token/login/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"auth",
+								"token",
+								"login",
+								""
+							]
+						},
+						"description": "Возвращает сгенерированный токен для пользователя."
+					},
+					"response": []
+				},
+				{
+					"name": "Admin authentication",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "admin@shop.ru",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "QWEasd123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/token/login/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"auth",
+								"token",
+								"login",
+								""
+							]
+						},
+						"description": "Возвращает сгенерированный токен для админа."
+					},
+					"response": []
+				},
+				{
+					"name": "Authentication failed",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "user@shop.ru",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "passwordddd",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/token/login/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"auth",
+								"token",
+								"login",
+								""
+							]
+						},
+						"description": "Возвращает ошибку о некорректных учетных данных."
+					},
+					"response": []
+				}
+			],
+			"description": "Аутентификация существующих пользователей посредством библиотеки djoser."
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Get product_list",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										""
+									]
+								},
+								"description": "Получение админом списка всех товаров."
+							},
+							"response": []
+						},
+						{
+							"name": "Get product_item Successed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/1/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"1",
+										""
+									]
+								},
+								"description": "Получение админом определенного товара из списка товаров."
+							},
+							"response": []
+						},
+						{
+							"name": "Get product_item Failed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/abc/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"abc",
+										""
+									]
+								},
+								"description": "Ошибка при попытке получить конкретный товар админом, из-за несуществующей страницы."
+							},
+							"response": []
+						},
+						{
+							"name": "Create product_item Successed",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_name",
+											"value": "Монитор",
+											"type": "text"
+										},
+										{
+											"key": "product_desc",
+											"value": "Удобный монитор с минимальным откликом",
+											"type": "text"
+										},
+										{
+											"key": "product_price",
+											"value": "15000",
+											"type": "text"
+										},
+										{
+											"key": "product_category",
+											"value": "2",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										""
+									]
+								},
+								"description": "Создание товара админом, для его последующего внесения в общий список товаров."
+							},
+							"response": []
+						},
+						{
+							"name": "Create product_item Failed",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_name",
+											"value": "Монитор",
+											"type": "text"
+										},
+										{
+											"key": "product_desc",
+											"value": "Удобный монитор с минимальным откликом",
+											"type": "text"
+										},
+										{
+											"key": "product_price",
+											"value": "15000",
+											"type": "text"
+										},
+										{
+											"key": "product_category",
+											"value": "10000000",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										""
+									]
+								},
+								"description": "Ошибка при попытке создания товара админом, из-за несуществующего ключа по категории товара."
+							},
+							"response": []
+						},
+						{
+							"name": "Change product_item Successed",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_name",
+											"value": "Компьютерная мышка",
+											"type": "text"
+										},
+										{
+											"key": "product_desc",
+											"value": "Удобный охват и подходит большинству потребителей",
+											"type": "text"
+										},
+										{
+											"key": "product_price",
+											"value": "3000",
+											"type": "text"
+										},
+										{
+											"key": "product_category",
+											"value": "2",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"9",
+										""
+									]
+								},
+								"description": "Полное изменение данных конкретного товара админом."
+							},
+							"response": []
+						},
+						{
+							"name": "Change product_item Failed",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_name",
+											"value": "Компьютерная мышка",
+											"type": "text"
+										},
+										{
+											"key": "product_desc",
+											"value": "Удобный охват и подходит большинству потребителей",
+											"type": "text"
+										},
+										{
+											"key": "product_price",
+											"value": "3000",
+											"type": "text"
+										},
+										{
+											"key": "product_category",
+											"value": "100000000",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"9",
+										""
+									]
+								},
+								"description": "Ошибка при попытке полного изменения данных конкретного товара админом, из-за несуществующего ключа по категории товара."
+							},
+							"response": []
+						},
+						{
+							"name": "Change product_item Successed",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_name",
+											"value": "Монитор",
+											"type": "text"
+										},
+										{
+											"key": "product_desc",
+											"value": "Удобный монитор с минимальным откликом",
+											"type": "text"
+										},
+										{
+											"key": "product_price",
+											"value": "15000",
+											"type": "text"
+										},
+										{
+											"key": "product_category",
+											"value": "2",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"9",
+										""
+									]
+								},
+								"description": "Частичное изменение данных конкретного продукта админом."
+							},
+							"response": []
+						},
+						{
+							"name": "Change product_item Failed",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_name",
+											"value": "Монитор",
+											"type": "text"
+										},
+										{
+											"key": "product_desc",
+											"value": "Удобный монитор с минимальным откликом",
+											"type": "text"
+										},
+										{
+											"key": "product_price",
+											"value": "15000",
+											"type": "text"
+										},
+										{
+											"key": "product_category",
+											"value": "10000000",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"9",
+										""
+									]
+								},
+								"description": "Ошибка при попытке частичного изменения данных товара админом, из-за несуществующего ключа по категории товара."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete product_item Successed",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"9",
+										""
+									]
+								},
+								"description": "Удаление конкретного товара админом из списка всех товаров."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete product_item Failed",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/100000000000/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"100000000000",
+										""
+									]
+								},
+								"description": "Ошибка при попытке удаления конкретного товара админом, из-за несуществующей страницы."
+							},
+							"response": []
+						}
+					],
+					"description": "Функционал администратора"
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Get product_list",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										""
+									]
+								},
+								"description": "Получение пользователем списка всех товаров."
+							},
+							"response": []
+						},
+						{
+							"name": "Get product_item Successed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/1/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"1",
+										""
+									]
+								},
+								"description": "Получение пользователем определенного товара из списка товаров."
+							},
+							"response": []
+						},
+						{
+							"name": "Get product_item Failed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/abc/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"abc",
+										""
+									]
+								},
+								"description": "Ошибка при попытке получить конкретный товар пользователем, из-за несуществующей страницы."
+							},
+							"response": []
+						},
+						{
+							"name": "Create product_item",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_name",
+											"value": "Футболка",
+											"type": "text"
+										},
+										{
+											"key": "product_desc",
+											"value": "Обычная футболка",
+											"type": "text"
+										},
+										{
+											"key": "product_price",
+											"value": "1000",
+											"type": "text"
+										},
+										{
+											"key": "product_category",
+											"value": "3",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										""
+									]
+								},
+								"description": "Ошибка при попытке создать товар пользователем, из-за нехватки прав пользователя."
+							},
+							"response": []
+						},
+						{
+							"name": "Change product_item",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_name",
+											"value": "Наушники",
+											"type": "text"
+										},
+										{
+											"key": "product_desc",
+											"value": "Лучший выбор для игр и прослушивания музыки",
+											"type": "text"
+										},
+										{
+											"key": "product_price",
+											"value": "8000",
+											"type": "text"
+										},
+										{
+											"key": "product_category",
+											"value": "2",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/4/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"4",
+										""
+									]
+								},
+								"description": "Ошибка при попытке полного изменения данных конкретного товара пользователем, из-за нехватки прав пользователя."
+							},
+							"response": []
+						},
+						{
+							"name": "Change product_item",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_name",
+											"value": "Монитор",
+											"type": "text"
+										},
+										{
+											"key": "product_desc",
+											"value": "Удобный монитор с минимальным откликом",
+											"type": "text"
+										},
+										{
+											"key": "product_price",
+											"value": "30000",
+											"type": "text"
+										},
+										{
+											"key": "product_category",
+											"value": "2",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/4/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"4",
+										""
+									]
+								},
+								"description": "Ошибка при попытке частичного изменения данных конкретного товара пользователем, из-за нехватки прав пользователя."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete product_item",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/products/4/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"products",
+										"4",
+										""
+									]
+								},
+								"description": "Ошибка при попытке удаления конкретного товара пользователем, из-за нехватки прав пользователя."
+							},
+							"response": []
+						}
+					],
+					"description": "Функционал пользователя"
+				}
+			],
+			"description": "## Товары:\n\n1. Получение данных в виде списка товаров (Авторизованные пользователи)\n2. Получение данных в виде конкретного товара (Авторизованные пользователи)\n3. Добавление товара в список существующих товаров (Администратор)\n4. Полное изменение данных конкретного товара (Администратор)\n5. Частичное изменение данных конкретного товара (Администратор)\n6. Удаление конкретного товара из списка всех товаров (Администратор)"
+		},
+		{
+			"name": "Carts",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Create cart Successed",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										""
+									]
+								},
+								"description": "Создание пользователем корзины."
+							},
+							"response": []
+						},
+						{
+							"name": "Create cart Failed",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										""
+									]
+								},
+								"description": "Ошибка при создании корзины гостем, из-за отсутствия учетных данных пользователя."
+							},
+							"response": []
+						},
+						{
+							"name": "Get cart and cart items Successed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										""
+									]
+								},
+								"description": "Получение конкретной корзины с товарами в ней, владельцем этой корзины.\n\nP.S. Данная корзина была создана заранее."
+							},
+							"response": []
+						},
+						{
+							"name": "Get cart and cart items Failed",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										""
+									]
+								},
+								"description": "Ошибка при получении конкретной корзины с товарами в ней, из-за нехватки прав гостя."
+							},
+							"response": []
+						}
+					],
+					"description": "Функционал пользователя"
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Create cart",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										""
+									]
+								},
+								"description": "Ошибка при создании корзины админом, из-за нехватки прав."
+							},
+							"response": []
+						},
+						{
+							"name": "Get cart and cart items",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										""
+									]
+								},
+								"description": "Ошибка при получении корзины и товаров в ней, из-за нехватки прав админа."
+							},
+							"response": []
+						}
+					],
+					"description": "Функционал администратора"
+				}
+			],
+			"description": "Корзины:\n\n1. Создание корзины для текущего пользователя (Авторизованные пользователи)\n2. Получение корзины и её товаров (Владелец корзины)"
+		},
+		{
+			"name": "CartItems",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Get items from cart Successed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										""
+									]
+								},
+								"description": "Получение товаров из корзины пользователем."
+							},
+							"response": []
+						},
+						{
+							"name": "Get items from cart Failed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										""
+									]
+								},
+								"description": "Ошибка при получении товаров из корзины, из-за нехватки прав гостя"
+							},
+							"response": []
+						},
+						{
+							"name": "Add item to cart Successed",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "quantity",
+											"value": "4",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										""
+									]
+								},
+								"description": "Добавление товара в корзину пользователем."
+							},
+							"response": []
+						},
+						{
+							"name": "Add item to cart Failed",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "quantity",
+											"value": "4",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										""
+									]
+								},
+								"description": "Ошибка при добавлении товара в корзину, из-за нехватки прав гостя."
+							},
+							"response": []
+						},
+						{
+							"name": "Get item from cart Successed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										"9",
+										""
+									]
+								},
+								"description": "Получение конкретного товара из корзины её владельцем."
+							},
+							"response": []
+						},
+						{
+							"name": "Get item from cart Failed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										"9",
+										""
+									]
+								},
+								"description": "Ошибка при получении товара из корзины, из-за нехватки прав гостя."
+							},
+							"response": []
+						},
+						{
+							"name": "Change item from cart Successed",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "quantity",
+											"value": "2",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										"9",
+										""
+									]
+								},
+								"description": "Изменение количества товара в корзине её владельцем."
+							},
+							"response": []
+						},
+						{
+							"name": "Change item from cart Failed",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "quantity",
+											"value": "2",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										"9",
+										""
+									]
+								},
+								"description": "Ошибка при изменении количества товара в корзине, из-за нехватки прав гостя."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete item from cart Successed",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										"9",
+										""
+									]
+								},
+								"description": "Удаление товара из корзины её владельцем."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete item from cart Failed",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										"9",
+										""
+									]
+								},
+								"description": "Ошибка при удалении товара из корзины, из-за нехватки прав гостя."
+							},
+							"response": []
+						}
+					],
+					"description": "Функционал пользователя"
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Get items from cart",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										""
+									]
+								},
+								"description": "Ошибка при получении товаров из корзины, из-за нехватки прав админа."
+							},
+							"response": []
+						},
+						{
+							"name": "Add item to cart",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "product_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "quantity",
+											"value": "4",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										""
+									]
+								},
+								"description": "Ошибка при добавлении товара в корзину, из-за нехватки прав админа."
+							},
+							"response": []
+						},
+						{
+							"name": "Get item from cart",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										"9",
+										""
+									]
+								},
+								"description": "Ошибка при получении конкретного товара из корзины, из-за нехватки прав админа."
+							},
+							"response": []
+						},
+						{
+							"name": "Change item from cart",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "quantity",
+											"value": "2",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										"9",
+										""
+									]
+								},
+								"description": "Ошибка при изменении количества конкретного товара из корзины, из-за нехватки прав админа."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete item from cart",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/carts/2e593525-57cb-4544-b250-ad40208cd34c/items-cart/9/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"carts",
+										"2e593525-57cb-4544-b250-ad40208cd34c",
+										"items-cart",
+										"9",
+										""
+									]
+								},
+								"description": "Ошибка при удалении конкретного товара из корзины, из-за нехватки прав админа."
+							},
+							"response": []
+						}
+					],
+					"description": "Функционал администратора"
+				}
+			],
+			"description": "## Товары в корзине:\n\n1. Получение товаров в корзине (Авторизованные пользователи)\n2. Добавление товаров в корзину (Авторизованные пользователи)\n3. Получение конкретного товара из корзины (Владелец корзины)\n4. Изменение конкретного товара из корзины (Владелец корзины)\n5. Удаление конкретного товара из корзины (Владелец корзины)"
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Create order Successed",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "cart_id",
+											"value": "2e593525-57cb-4544-b250-ad40208cd34c",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/orders/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"orders",
+										""
+									]
+								},
+								"description": "Создание заказа на основе корзины для текущего пользователя.\n\nP.S. Сама корзина удаляется"
+							},
+							"response": []
+						},
+						{
+							"name": "Create order Failed",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "cart_id",
+											"value": "2e593525-57cb-4544-b250-ad40208cd34c",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/orders/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"orders",
+										""
+									]
+								},
+								"description": "Ошибка при создании заказа на основе корзины, из-за нехватки учетных данных."
+							},
+							"response": []
+						},
+						{
+							"name": "Get user orders Succesed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/orders/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"orders",
+										""
+									]
+								},
+								"description": "Получение списка заказов для владельца заказов."
+							},
+							"response": []
+						},
+						{
+							"name": "Get user orders Failed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/orders/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"orders",
+										""
+									]
+								},
+								"description": "Ошибка при получении списка заказов, из-за нехватки учетных данных гостя."
+							},
+							"response": []
+						},
+						{
+							"name": "Change order status Successed",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "pending_status",
+											"value": "З",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/orders/8/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"orders",
+										"8",
+										""
+									]
+								},
+								"description": "Изменение статуса заказа самим владельцем заказа.\n\nP.S. Заказ был создан заранее"
+							},
+							"response": []
+						},
+						{
+							"name": "Change order status Failed",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "pending_status",
+											"value": "З",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/orders/8/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"orders",
+										"8",
+										""
+									]
+								},
+								"description": "Ошибка при изменении статуса заказа, из-за нехватки учетных данных."
+							},
+							"response": []
+						}
+					],
+					"description": "Функционал пользователя"
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Create order",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "cart_id",
+											"value": "2e593525-57cb-4544-b250-ad40208cd34c",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/orders/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"orders",
+										""
+									]
+								},
+								"description": "Ошибка при создании заказа, из-за нехватки прав админа"
+							},
+							"response": []
+						},
+						{
+							"name": "Get user orders",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/orders/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"orders",
+										""
+									]
+								},
+								"description": "Ошибка при получении списка заказов пользователей, из-за нехватки прав админа."
+							},
+							"response": []
+						},
+						{
+							"name": "Change order status",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "pending_status",
+											"value": "З",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/orders/8/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"orders",
+										"8",
+										""
+									]
+								},
+								"description": "Ошибка при изменении статуса заказа, из-за нехватки прав админа."
+							},
+							"response": []
+						}
+					],
+					"description": "Функционал администратора"
+				}
+			],
+			"description": "Заказы:\n\n1. Создание заказа на основе корзины текущего пользователя (Авторизованные пользователи)\n2. Получение своих заказов (Владелец заказов)\n    \n3. Изменение статуса конкретного заказа пользователем (Владелец заказа)"
+		},
+		{
+			"name": "Registration",
+			"item": [
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Get list of users",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/auth/users/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"auth",
+										"users",
+										""
+									]
+								},
+								"description": "Получение списка существующих пользователей."
+							},
+							"response": []
+						},
+						{
+							"name": "Create user",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "aboba3",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "kakoyto_email3@shop.ru",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "OiK5002$2007$",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/auth/users/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"auth",
+										"users",
+										""
+									]
+								},
+								"description": "Регистрация(создание) пользователя администратором."
+							},
+							"response": []
+						},
+						{
+							"name": "Create user Failed",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "aboba",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "user@shop.ru",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/auth/users/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"auth",
+										"users",
+										""
+									]
+								},
+								"description": "Ошибка при создании пользователя другим пользователем, из-за существующего пользователя с таким же email."
+							},
+							"response": []
+						}
+					],
+					"description": "Функционал администратора"
+				},
+				{
+					"name": "Guest",
+					"item": [
+						{
+							"name": "Get list of users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8000/auth/users/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"auth",
+										"users",
+										""
+									]
+								},
+								"description": "Ошибка при получении списка пользователей, из-за нехватки прав гостя."
+							},
+							"response": []
+						},
+						{
+							"name": "Create user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "aboba",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "kakoyto_email@shop.ru",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "OiK5002%2007",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/auth/users/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"auth",
+										"users",
+										""
+									]
+								},
+								"description": "Регистрация(создание) гостем пользователя."
+							},
+							"response": []
+						},
+						{
+							"name": "Create user Failed",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "aboba",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "user@shop.ru",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/auth/users/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"auth",
+										"users",
+										""
+									]
+								},
+								"description": "Ошибка при создании гостем пользователя, из-за существующего пользователя с таким же email."
+							},
+							"response": []
+						}
+					],
+					"description": "Функционал гостя"
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Get list of users",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/auth/users/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"auth",
+										"users",
+										""
+									]
+								},
+								"description": "Ошибка при получении списка пользователей, из-за нехватки прав пользователя."
+							},
+							"response": []
+						},
+						{
+							"name": "Create user",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "aboba2",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "kakoyto_email2@shop.ru",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "OiK5002%2007%",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/auth/users/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"auth",
+										"users",
+										""
+									]
+								},
+								"description": "Регистрация(создание) пользователя другим пользователем."
+							},
+							"response": []
+						},
+						{
+							"name": "Create user Failed",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "aboba",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "user@shop.ru",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/auth/users/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"auth",
+										"users",
+										""
+									]
+								},
+								"description": "Ошибка при создании пользователя другим пользователем, из-за существующего пользователя с таким же email."
+							},
+							"response": []
+						}
+					],
+					"description": "Функционал пользователя"
+				}
+			],
+			"description": "Регистрация(создание) новых пользователей данного API посредством библиотеки djoser."
+		},
+		{
+			"name": "Logout",
+			"item": [
+				{
+					"name": "User logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token 1749f98ec3f065d77fd22b1bddbd5d15df314136",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/token/logout/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"auth",
+								"token",
+								"logout",
+								""
+							]
+						},
+						"description": "Выход из учетной записи пользователя, с последующим удалением токена."
+					},
+					"response": []
+				},
+				{
+					"name": "Admin logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token 86eabe9d746b9ad9caafa570e28d747fea81634b",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/token/logout/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"auth",
+								"token",
+								"logout",
+								""
+							]
+						},
+						"description": "Выход из учетной записи администратора, с последующим удалением токена."
+					},
+					"response": []
+				},
+				{
+					"name": "Logout failed",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token rabochiytoken123",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "user@shop.ru",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "passwordddd",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/token/logout/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"auth",
+								"token",
+								"logout",
+								""
+							]
+						},
+						"description": "Ошибка при вводе некорректного токена для выхода из учетной записи пользователя."
+					},
+					"response": []
+				}
+			],
+			"description": "Выход из учетной записи пользователей, с последующим уничтожением токена.\n\nP.S. Если выполнить данные запросы придётся снова совершать аутентификацию пользователя для генерации нового токена, и соответсвенно ранее прописанные токены для запросов перестанут действовать. Для корректной работы их снова нужно будет указывать в заголовках запросов!"
+		}
+	]
+}
